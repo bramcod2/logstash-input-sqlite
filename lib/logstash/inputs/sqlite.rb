@@ -160,11 +160,11 @@ class LogStash::Inputs::Sqlite < LogStash::Inputs::Base
           rows = get_n_rows_from_table(@db, table_name, offset, @batch)
           count += rows.count
           rows.each do |row|
-            event = LogStash::Event.new("host" => @host, "db" => @path)
+            event = LogStash::Event.new("host" => @host, "db" => @path, "table" => table_name)
             decorate(event)
             # store each column as a field in the event.
             row.each do |column, element|
-              next if column == @id_field
+              # next if column == @id_field
               event.set(column.to_s, element)
             end
             queue << event
